@@ -1,6 +1,6 @@
 {
     "@context": "https://www.w3.org/ns/solid/oidc-context.jsonld",
-    "client_id": "https://raw.githubusercontent.com/DanielFlorido/podsModuleRest/main/src/main/resources/clients/ClientIdDocument.jsonld",
+    "client_id": "https://danielflorido.github.io/podsModuleRest/src/main/resources/clients/ClientIdDocument.jsonld",
     "redirect_uris": [
       "http://localhost:8080/login/oauth2/code/myApp"
     ],
