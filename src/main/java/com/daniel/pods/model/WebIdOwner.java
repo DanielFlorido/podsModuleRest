@@ -14,9 +14,9 @@ public class WebIdOwner extends WebIdProfile {
     private final IRI vcardName;
     private String token;
 
-    public WebIdOwner(URI identifier, Dataset dataset, IRI vcardName) {
+    public WebIdOwner(final URI identifier, final Dataset dataset) {
         super(identifier, dataset);
-        this.vcardName = vcardName;
+        this.vcardName = rdf.createIRI(Vocabulary.FN);
     }
 
     public String getToken() {

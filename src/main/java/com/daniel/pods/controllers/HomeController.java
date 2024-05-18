@@ -15,7 +15,11 @@ public class HomeController {
     private final PrintWriter printWriter = new PrintWriter(System.out, true);
     @GetMapping("/")
     public String home(){
-        return "hello Word!";
+        if(userService.getCurrentUser()!= null){
+            printWriter.println("username: "+userService.getCurrentUser().geUserName());
+            return ("username: "+userService.getCurrentUser().geUserName());
+        }
+        return "helloSecured!";
     }
     @GetMapping("/login")
     public String login(){

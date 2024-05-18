@@ -5,9 +5,10 @@
       "http://localhost:8080/login/oauth2/code/myApp"
     ],
     "post_logout_redirect_uris": [
-      "http://localhost:8080/secured"
+      "http://localhost:8080",
+      "http://localhost:8080/"
     ],
-    "client_name": "Spring-Boot Demo App",
+    "client_name": "Pods Arquitectura",
     "id_token_signed_response_alg": "ES256",
     "grant_types": [
       "authorization_code"
