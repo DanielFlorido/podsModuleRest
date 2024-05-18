@@ -1,5 +1,7 @@
 package com.daniel.pods.controllers;
 
+import com.daniel.pods.manager.SessionManager;
+import com.daniel.pods.service.UserService;
 import com.daniel.pods.starter.Expense;
 import com.inrupt.client.auth.Session;
 import com.inrupt.client.openid.OpenIdAuthenticationProvider;
@@ -10,6 +12,8 @@ import com.inrupt.client.webid.WebIdProfile;
 import com.inrupt.client.solid.PreconditionFailedException;
 import com.inrupt.client.solid.ForbiddenException;
 import com.inrupt.client.solid.NotFoundException;
+import org.apache.catalina.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.apache.commons.rdf.api.RDFSyntax;
@@ -23,33 +27,23 @@ import java.util.Set;
 @RequestMapping("/api")
 @RestController
 public class ExpenseController {
-    @Value("${solid.idp}")
-    private String solidIdp;
-
-    @Value("${solid.client.id}")
-    private String clientId;
-
-    @Value("${solid.client.secret}")
-    private String clientSecret;
-
-    @Value("${solid.auth.flow}")
-    private String authFlow;
-
+    @Autowired
+    private SolidSyncClient client;
+    @Autowired
+    private SessionManager sessionManager;
+    @Autowired
+    private UserService userService;
     /**
      * Note 1: Authenticated Session
      * Using the client credentials, create an authenticated session.
      */
-    final Session session = OpenIdSession.ofClientCredentials(
-            URI.create(System.getenv("MY_SOLID_IDP")),
-            System.getenv("MY_SOLID_CLIENT_ID"),
-            System.getenv("MY_SOLID_CLIENT_SECRET"),
-            System.getenv("MY_AUTH_FLOW"));
+    //final Session session = OpenIdSession.ofIdToken(userService.getCurrentUser().getToken());
     /**
      * Note 2: SolidSyncClient
      * Instantiates a synchronous client for the authenticated session.
      * The client has methods to perform CRUD operations.
      */
-    final SolidSyncClient client = SolidSyncClient.getClient().session(session);
+   // final SolidSyncClient client = userService.getClient().session(session);
     private final PrintWriter printWriter = new PrintWriter(System.out, true);
 
     /**
@@ -57,9 +51,9 @@ public class ExpenseController {
      * Using the SolidSyncClient client.read() method, reads the user's WebID Profile document and returns the Pod URI(s).
      */
     @GetMapping("/pods")
-    public Set<URI> getPods(@RequestParam(value = "webid", defaultValue = "") String webID) {
+    public Set<URI> getPods() {
         printWriter.println("ExpenseController:: getPods");
-        try (final var profile = client.read(URI.create(webID), WebIdProfile.class)) {
+        try (final var profile = client.read(URI.create(userService.getCurrentUser().geUserName()), WebIdProfile.class)) {
             return profile.getStorages();
         }
     }

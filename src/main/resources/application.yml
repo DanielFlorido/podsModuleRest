@@ -21,3 +21,7 @@ spring:
         provider:
           inrupt:
             issuer-uri: https://login.inrupt.com
+            token-uri: https://login.inrupt.com/token
+            authorization-uri: https://login.inrupt.com/authorization
+            user-info-uri: https://login.inrupt.com/userinfo
+            jwk-set-uri: https://login.inrupt.com/jwks
