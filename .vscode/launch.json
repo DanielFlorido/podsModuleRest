@@ -1,0 +1,15 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-PodsApplication<pods>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.daniel.pods.PodsApplication",
+            "projectName": "pods",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env",
+            "vmArgs": "-DMY_SOLID_IDP=https://login.inrupt.com -DMY_SOLID_CLIENT_ID=f221d46a-f7a2-4c82-8adb-e9d071fd8c1f -DMY_SOLID_CLIENT_SECRET=4b1257db-b4cb-4cdc-9f48-9cb59ee4dd3c -DMY_AUTH_FLOW=client_secret_basic"
+        }
+    ]
+}
