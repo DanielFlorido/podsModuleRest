@@ -21,6 +21,7 @@ public class HomeController {
     public String login(){
         if(userService.getCurrentUser()!= null){
             printWriter.println("username: "+userService.getCurrentUser().geUserName());
+            return ("username: "+userService.getCurrentUser().geUserName());
         }
         return "helloSecured!";
     }

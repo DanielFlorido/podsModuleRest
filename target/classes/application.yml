@@ -11,7 +11,7 @@ spring:
       client:
         registration:
           myApp:
-            client-id: https://inrupt.github.io/solid-client-java/clients/springboot-testing.jsonld
+            client-id: https://raw.githubusercontent.com/DanielFlorido/podsModuleRest/main/src/main/resources/clients/ClientIdDocument.jsonld
             provider: inrupt
             scope:
               - openid
