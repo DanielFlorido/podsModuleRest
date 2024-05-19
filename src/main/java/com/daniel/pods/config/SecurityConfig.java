@@ -34,15 +34,15 @@ public class SecurityConfig {
                             .invalidateHttpSession(true)
                             .clearAuthentication(true)
                             .deleteCookies("JSESSIONID")
-                            .logoutSuccessHandler(oidcLogoutSuccesHandler());
+                            .logoutSuccessHandler(oidcLogoutSuccessHandler());
                 })
                 .oauth2Login(Customizer.withDefaults())
                 .build();
     }
 
-    private LogoutSuccessHandler oidcLogoutSuccesHandler() {
+    private LogoutSuccessHandler oidcLogoutSuccessHandler() {
         final OidcClientInitiatedLogoutSuccessHandler successHandler = new OidcClientInitiatedLogoutSuccessHandler(clientRegistrationRepository);
-        successHandler.setPostLogoutRedirectUri("http://localhost:8080/");
+        successHandler.setPostLogoutRedirectUri("http://localhost:8080/home");
         return successHandler;
     }
 

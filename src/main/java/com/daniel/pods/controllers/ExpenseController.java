@@ -1,8 +1,10 @@
 package com.daniel.pods.controllers;
 
 import com.daniel.pods.manager.SessionManager;
+import com.daniel.pods.model.Vocabulary;
 import com.daniel.pods.service.UserService;
 import com.daniel.pods.starter.Expense;
+import com.inrupt.client.accessgrant.AccessGrantClient;
 import com.inrupt.client.auth.Session;
 import com.inrupt.client.openid.OpenIdAuthenticationProvider;
 import com.inrupt.client.openid.OpenIdProvider;
@@ -26,9 +28,7 @@ import java.util.Set;
 
 @RequestMapping("/api")
 @RestController
-public class ExpenseController {
-    @Autowired
-    private SolidSyncClient client;
+public class ExpenseController {    
     @Autowired
     private SessionManager sessionManager;
     @Autowired
@@ -53,7 +53,7 @@ public class ExpenseController {
     @GetMapping("/pods")
     public Set<URI> getPods() {
         printWriter.println("ExpenseController:: getPods");
-        try (final var profile = client.read(URI.create(userService.getCurrentUser().geUserName()), WebIdProfile.class)) {
+        try (final var profile = userService.getClient().read(URI.create(userService.getCurrentUser().geUserName()), WebIdProfile.class)) {
             return profile.getStorages();
         }
     }
@@ -66,7 +66,9 @@ public class ExpenseController {
     @PostMapping(path = "/expenses/create")
     public Expense createExpense(@RequestBody Expense newExpense) {
         printWriter.println("ExpenseController:: createExpense");
-        try (var createdExpense = client.create(newExpense)) {
+        //final AccessGrantClient accessGrantClient = new AccessGrantClient(Vocabulary.PS_ACCESS_GRANT_URI).session(sessionManager.getSession());
+
+        try (var createdExpense = userService.getClient().create(newExpense)) {
             printExpenseAsTurtle(createdExpense);
             return createdExpense;
         } catch(PreconditionFailedException e1) {
@@ -89,7 +91,7 @@ public class ExpenseController {
     @GetMapping("/expenses/get")
     public Expense getExpense(@RequestParam(value = "resourceURL", defaultValue = "") String resourceURL) {
         printWriter.println("ExpenseController:: getExpense");
-        try (var resource = client.read(URI.create(resourceURL), Expense.class)) {
+        try (var resource = userService.getClient().read(URI.create(resourceURL), Expense.class)) {
             return resource;
         } catch (NotFoundException e1) {
             // Errors if resource is not found
@@ -112,7 +114,7 @@ public class ExpenseController {
     public Expense updateExpense(@RequestBody Expense expense) {
         printWriter.println("ExpenseController:: updateExpense");
 
-        try(var updatedExpense = client.update(expense)) {
+        try(var updatedExpense = userService.getClient().update(expense)) {
             printExpenseAsTurtle(updatedExpense);
             return updatedExpense;
         } catch (NotFoundException e1) {
@@ -137,7 +139,7 @@ public class ExpenseController {
     public void deleteExpense(@RequestParam(value = "resourceURL") String resourceURL) {
         printWriter.println("ExpenseController:: deleteExpense");
         try {
-            client.delete(URI.create(resourceURL));
+            userService.getClient().delete(URI.create(resourceURL));
 
             // Alternatively, you can specify an Expense object to the delete method.
             // The delete method deletes  the Expense recorde located in the Expense.identifier field.

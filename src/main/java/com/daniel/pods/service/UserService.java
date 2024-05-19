@@ -15,17 +15,16 @@ import java.net.URI;
 @Service
 @SessionScope
 public class UserService {
-    
-    @Autowired
-    private SolidSyncClient client;
+
+    private SolidSyncClient client= SolidSyncClient.getClient();
 
     public WebIdOwner getCurrentUser(){
         if(!(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken)){
             final Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-            if(principal instanceof OidcUser user){
-                final String webIdUrl= user.getClaim("webid");
-                try (final WebIdOwner profile = client.read(URI.create(webIdUrl), WebIdOwner.class)){
+            if (principal instanceof OidcUser user) {
+                final String webIdUrl = user.getClaim("webid");
+                try (final WebIdOwner profile = client.read(URI.create(webIdUrl), WebIdOwner.class)) {
                     profile.setToken(user.getIdToken().getTokenValue());
                     return profile;
                 }
@@ -33,4 +32,13 @@ public class UserService {
         }
         return null;
     }
+
+    public SolidSyncClient getClient() {
+        return client;
+    }
+
+    public void setClient(SolidSyncClient client) {
+        this.client = client;
+    }
+    
 }

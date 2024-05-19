@@ -13,18 +13,13 @@ import java.io.PrintWriter;
 public class HomeController {
 
     @Autowired
-    private UserService userService;
-    @Autowired
-    private SolidSyncClient client;
+    private UserService userService;    
+
     private final PrintWriter printWriter = new PrintWriter(System.out, true);
     @GetMapping("/")
     public String home(){
-        if(userService.getCurrentUser()!= null){
-            if(client==null){
-                printWriter.println("client null");
-            }
-            printWriter.println("username: "+userService.getCurrentUser().geUserName());
-            return ("username: "+userService.getCurrentUser().getToken());
+        if(userService.getCurrentUser()!= null){            
+            return (userService.getCurrentUser().getToken());
         }
         return "helloSecured!";
     }
